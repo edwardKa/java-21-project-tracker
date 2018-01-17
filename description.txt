@@ -1,0 +1,7 @@
+1. REST API for CRUD a new user
+2. REST API for CRUD a new item
+3. REST API for assigning a user to the item
+4. REST API for user login
+5. Session management (restrict requests without header), but login
+6. Logout REST API
+7. Configure swagger
