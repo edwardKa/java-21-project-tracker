@@ -10,7 +10,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Component
+//@Component
 public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
@@ -20,13 +20,6 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        /*
-        * "/v2/api-docs",
-                        "/swagger-resources/**",
-                        "/configuration/**",
-                        "/swagger-ui.html",
-                        "/webjars/**",
-        * */
         if (request.getRequestURI().contains("login") || request.getRequestURI().contains("/v2/")
                 ||request.getRequestURI().contains("swagger") ||
                 request.getRequestURI().contains("configuration") ||
