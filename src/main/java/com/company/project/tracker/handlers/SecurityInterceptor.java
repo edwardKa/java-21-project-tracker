@@ -31,7 +31,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
                 ||request.getRequestURI().contains("swagger") ||
                 request.getRequestURI().contains("configuration") ||
                 request.getRequestURI().contains("webjars") ||
-                request.getRequestURI().contains("registration")) {
+                request.getRequestURI().contains("register")) {
             return true;
         }
 
