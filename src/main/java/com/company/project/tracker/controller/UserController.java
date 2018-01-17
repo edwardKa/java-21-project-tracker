@@ -7,6 +7,7 @@ import com.company.project.tracker.model.web.UserLoginRequest;
 import com.company.project.tracker.model.web.UserLoginResponse;
 import com.company.project.tracker.model.web.UserUpdateRequest;
 import com.company.project.tracker.repository.UserRepository;
+import com.company.project.tracker.service.AuthenticationService;
 import com.company.project.tracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -25,20 +26,32 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AuthenticationService authenticationService;
+
+    private void authenticate(String sessionId) {
+//        authenticationService.getAuthenticatedUser(sessionId);
+    }
+
     @GetMapping(value = "/{userId}")
-    public User getUserById(@PathVariable("userId") Long userId) {
+    public User getUserById(@PathVariable("userId") Long userId,
+                            @RequestHeader("Authorization") String sessionId) {
+        authenticate(sessionId);
         return userService.getById(userId);
     }
 
     @GetMapping(value = "/")
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(@RequestHeader("Authorization") String sessionId) {
+        authenticate(sessionId);
         return userRepository.findAll();
     }
 
     @PutMapping(value = "/{userId}")
     public User updateUser(@PathVariable("userId") Long userId,
                            @RequestBody @Valid UserUpdateRequest userUpdateRequest,
-                           BindingResult result) {
+                           BindingResult result,
+                           @RequestHeader("Authorization") String sessionId) {
+        authenticate(sessionId);
         if (result.hasErrors()) {
             throw new InputValidationException(result);
         }
@@ -48,7 +61,7 @@ public class UserController {
 
     @PostMapping("/register")
     public UserLoginResponse registerNewUser(@RequestBody @Valid RegisterUserRequest userRequest,
-                                BindingResult result) {
+                                             BindingResult result) {
         if (result.hasErrors()) {
             throw new InputValidationException(result);
         }
@@ -69,6 +82,7 @@ public class UserController {
 
     @PostMapping("/logout")
     public void logout(@RequestHeader("Authorization") String sessionId) {
+        authenticate(sessionId);
         userService.logout(sessionId);
     }
 

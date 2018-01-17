@@ -49,11 +49,13 @@ public class UserServiceImpl implements UserService {
 
         userLoginRepository.save(userLogin);
 
-        UserLoginRequest userLoginRequest = new UserLoginRequest();
-        userLoginRequest.setEmail(registerUserRequest.getEmail());
-        userLoginRequest.setPassword(registerUserRequest.getPassword());
+        UserSession userSession = new UserSession();
+        userSession.setUser(user);
+        userSession.setSessionId(UUID.randomUUID().toString());
+        userSession.setIsValid(true);
 
-        return loginUser(userLoginRequest);
+
+        return new UserLoginResponse(user, userSession.getSessionId());
     }
 
     @Override
