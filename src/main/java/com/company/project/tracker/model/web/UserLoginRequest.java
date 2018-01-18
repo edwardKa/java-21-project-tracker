@@ -1,9 +1,6 @@
 package com.company.project.tracker.model.web;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -11,6 +8,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class UserLoginRequest {
 
     @NotBlank(message = "Email cannot be blank")

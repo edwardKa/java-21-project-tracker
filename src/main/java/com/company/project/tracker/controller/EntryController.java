@@ -5,23 +5,24 @@ import com.company.project.tracker.exception.InputValidationException;
 import com.company.project.tracker.model.web.RegisterUserRequest;
 import com.company.project.tracker.model.web.UserLoginRequest;
 import com.company.project.tracker.model.web.UserLoginResponse;
+import com.company.project.tracker.service.AuthenticationService;
 import com.company.project.tracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @NoAuthentication
 @RequestMapping(value = "/users")
-public class LoginController {
+public class EntryController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @PostMapping("/register")
     public UserLoginResponse registerNewUser(@RequestBody @Valid RegisterUserRequest userRequest,
@@ -30,7 +31,7 @@ public class LoginController {
             throw new InputValidationException(result);
         }
 
-        return userService.registerNweUser(userRequest);
+        return userService.registerNewUser(userRequest);
 
     }
 
@@ -41,6 +42,11 @@ public class LoginController {
             throw new InputValidationException(result);
         }
 
-        return userService.loginUser(userLoginRequest);
+        return authenticationService.loginUser(userLoginRequest);
+    }
+
+    @PostMapping("/logout")
+    public void logout(@RequestHeader("Authorization") String sessionId) {
+        authenticationService.logout(sessionId);
     }
 }

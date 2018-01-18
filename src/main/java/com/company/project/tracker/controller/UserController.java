@@ -50,9 +50,6 @@ public class UserController {
 
 
 
-    @PostMapping("/logout")
-    public void logout(@RequestHeader("Authorization") String sessionId) {
-        userService.logout(sessionId);
-    }
+
 
 }

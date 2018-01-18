@@ -1,5 +1,6 @@
 package com.company.project.tracker.exception;
 
+import javafx.util.Pair;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -17,7 +18,14 @@ public class InputValidationException extends RuntimeException {
         this.result = result;
     }
 
+    public InputValidationException(Pair<String, String> currentErrors) {
+        setError(currentErrors.getKey(), currentErrors.getValue());
+    }
+
     public Map<String, List<String>> getErrors() {
+        if (this.result == null) {
+            return this.currentErrors;
+        }
 
         List<FieldError> fieldErrors = result.getFieldErrors();
 
