@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
         userSession.setSessionId(UUID.randomUUID().toString());
         userSession.setIsValid(true);
 
+        userSessionRepository.save(userSession);
 
         return new UserLoginResponse(user, userSession.getSessionId());
     }
@@ -103,12 +104,14 @@ public class UserServiceImpl implements UserService {
         userSession.setSessionId(UUID.randomUUID().toString());
         userSession.setIsValid(true);
 
+        userSessionRepository.save(userSession);
+
         return new UserLoginResponse(user, userSession.getSessionId());
     }
 
     @Override
     public void logout(String sessionId) {
-        UserSession userSession = userSessionRepository.findBySessionId(sessionId);
+        UserSession userSession = userSessionRepository.findBySessionIdAndIsValidTrue(sessionId);
         if (userSession != null) {
             userSession.setIsValid(false);
             userSessionRepository.save(userSession);

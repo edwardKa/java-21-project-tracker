@@ -2,9 +2,6 @@ package com.company.project.tracker.controller;
 
 import com.company.project.tracker.exception.InputValidationException;
 import com.company.project.tracker.model.entity.User;
-import com.company.project.tracker.model.web.RegisterUserRequest;
-import com.company.project.tracker.model.web.UserLoginRequest;
-import com.company.project.tracker.model.web.UserLoginResponse;
 import com.company.project.tracker.model.web.UserUpdateRequest;
 import com.company.project.tracker.repository.UserRepository;
 import com.company.project.tracker.service.AuthenticationService;
@@ -29,29 +26,21 @@ public class UserController {
     @Autowired
     private AuthenticationService authenticationService;
 
-    private void authenticate(String sessionId) {
-//        authenticationService.getAuthenticatedUser(sessionId);
-    }
 
     @GetMapping(value = "/{userId}")
-    public User getUserById(@PathVariable("userId") Long userId,
-                            @RequestHeader("Authorization") String sessionId) {
-        authenticate(sessionId);
+    public User getUserById(@PathVariable("userId") Long userId) {
         return userService.getById(userId);
     }
 
     @GetMapping(value = "/")
-    public List<User> getAllUsers(@RequestHeader("Authorization") String sessionId) {
-        authenticate(sessionId);
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     @PutMapping(value = "/{userId}")
     public User updateUser(@PathVariable("userId") Long userId,
                            @RequestBody @Valid UserUpdateRequest userUpdateRequest,
-                           BindingResult result,
-                           @RequestHeader("Authorization") String sessionId) {
-        authenticate(sessionId);
+                           BindingResult result) {
         if (result.hasErrors()) {
             throw new InputValidationException(result);
         }
@@ -59,30 +48,10 @@ public class UserController {
         return userService.updateUserById(userId, userUpdateRequest);
     }
 
-    @PostMapping("/register")
-    public UserLoginResponse registerNewUser(@RequestBody @Valid RegisterUserRequest userRequest,
-                                             BindingResult result) {
-        if (result.hasErrors()) {
-            throw new InputValidationException(result);
-        }
 
-        return userService.registerNweUser(userRequest);
-
-    }
-
-    @PostMapping("/login")
-    public UserLoginResponse login(@RequestBody @Valid UserLoginRequest userLoginRequest,
-                                   BindingResult result) {
-        if (result.hasErrors()) {
-            throw new InputValidationException(result);
-        }
-
-        return userService.loginUser(userLoginRequest);
-    }
 
     @PostMapping("/logout")
     public void logout(@RequestHeader("Authorization") String sessionId) {
-        authenticate(sessionId);
         userService.logout(sessionId);
     }
 

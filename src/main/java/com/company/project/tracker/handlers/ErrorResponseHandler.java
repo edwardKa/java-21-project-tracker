@@ -32,7 +32,7 @@ public class ErrorResponseHandler {
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> getAuthenticationException(AuthenticationException exception) {
 
-        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
+        HttpStatus httpStatus = HttpStatus.FORBIDDEN;
         ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), null, exception.getMessage());
 
         return new ResponseEntity<>(errorResponse, httpStatus);
@@ -40,8 +40,6 @@ public class ErrorResponseHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> getSystemExceptionResponse(Exception exception) {
-
-
 
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), null, exception.getMessage());

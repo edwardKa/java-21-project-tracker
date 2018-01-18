@@ -16,11 +16,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public User getAuthenticatedUser(String sessionId) {
-        UserSession bySessionId = userSessionRepository.findBySessionId(sessionId);
+        UserSession bySessionId = userSessionRepository.findBySessionIdAndIsValidTrue(sessionId);
         if (bySessionId == null) {
             throw new AuthenticationException("User is not authenticated");
         }
 
         return bySessionId.getUser();
+    }
+
+    @Override
+    public void authenticate(String sessionId) {
+        UserSession bySessionId = userSessionRepository.findBySessionIdAndIsValidTrue(sessionId);
+        if (bySessionId == null) {
+            throw new AuthenticationException("User is not authenticated");
+        }
     }
 }
