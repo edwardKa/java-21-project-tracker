@@ -2,6 +2,7 @@ package com.company.project.tracker.handlers;
 
 import com.company.project.tracker.exception.AuthenticationException;
 import com.company.project.tracker.exception.InputValidationException;
+import com.company.project.tracker.exception.ItemDoesNotExistException;
 import com.company.project.tracker.model.web.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,14 @@ public class ErrorResponseHandler {
 
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), null, exception.getMessage());
+
+        return new ResponseEntity<>(errorResponse, httpStatus);
+    }
+
+    @ExceptionHandler(ItemDoesNotExistException.class)
+    public ResponseEntity<ErrorResponse> getItemDoesNotExistResponse(ItemDoesNotExistException e) {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), null, e.getMessage());
 
         return new ResponseEntity<>(errorResponse, httpStatus);
     }
